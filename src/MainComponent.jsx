@@ -3,17 +3,10 @@ import { useState } from "react";
 import ListBoxComponent from "./ListBoxComponent";
 import WatchedBoxComponent from "./WatchedBoxComponent";
 
-function MainComponent({ tempMovieData, tempWatchedData, average }) {
+function MainComponent({ children }) {
   return (
     <main className="main">
-
-      <ListBoxComponent tempMovieData={tempMovieData} />
-
-      <WatchedBoxComponent
-        tempWatchedData={tempWatchedData}
-        average={average}
-      />
-      
+      {children}
     </main>
   );
 }

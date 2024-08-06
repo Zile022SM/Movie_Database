@@ -1,9 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 
-function InputComponent() {
-
-    const [query, setQuery] = useState("");
+function InputComponent({ query, setQuery }) {
 
   return (
 

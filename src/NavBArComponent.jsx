@@ -3,16 +3,14 @@ import InputComponent from './InputComponent';
 import LogoComponent from './LogoComponent';
 import SearchResultComponent from './SearchResultComponent';
 
-function NavBArComponent() {
+function NavBArComponent({ children }) {
 
   return (
     <nav className="nav-bar"> 
-        <LogoComponent /> 
-        <InputComponent />
-        <SearchResultComponent />
+        {children}
     </nav>
   );
-  
+
 }
 
 export default NavBArComponent;

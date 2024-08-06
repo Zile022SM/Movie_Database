@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NavBArComponent from "./NavBArComponent";
 import SearchResultComponent from "./SearchResultComponent";
 import LogoComponent from "./LogoComponent";
@@ -9,8 +9,6 @@ import BoxComponent from "./BoxComponent";
 import MovieListComponent from "./MovieListComponent";
 import WatchedListComponent from "./WatchedListComponent";
 import WatchedSummaryComponent from "./WatchedSummaryComponent";
-import Loader from "./Loader";
-import ErrorMessage from "./ErrorMessage";
 
 const tempMovieData = [
   {
@@ -59,66 +57,23 @@ const tempWatchedData = [
   },
 ];
 
-const KEY = "a15c47cf";
-
 export default function App() {
 
-  const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [query, setQuery] = useState("");
-
- useEffect(function() {
-
-  async function fetchMovies() {
-
-    try{
-      setIsLoading(true);
-      setError("");
-      const res = await fetch(`https://www.omdbapi.com/?apikey=${KEY}&s=${query}`);
-
-      if(!res.ok) throw new Error("Something went wrong");
-
-      const data = await res.json();
-
-      if(data.Response === "False") throw new Error("Movie not found");
-
-      setMovies(data.Search);
-      setIsLoading(false);
-
-    }catch(err){
-      setError(err.message);
-    }finally{
-      setIsLoading(false);
-    }
-  }
-
-  if(query.length < 3){
-    setMovies([]);
-    setError("");
-    return;
-  }
-
-  fetchMovies();
- }, [query]);
-
-
+  const [movies, setMovies] = useState(tempMovieData);
+  const [watched, setWatched] = useState(tempWatchedData);
 
   return (
     <>
 
       <NavBArComponent>
         <LogoComponent /> 
-        <InputComponent query={query} setQuery={setQuery} />
+        <InputComponent />
         <SearchResultComponent movies={movies} />
       </NavBArComponent>
 
       <MainComponent>
         <BoxComponent>
-          {isLoading && <Loader />}
-          {!isLoading && !error && <MovieListComponent movies={movies} />}
-          {error && <ErrorMessage message={error} />}
+          <MovieListComponent movies={movies} />
         </BoxComponent>
 
         <BoxComponent>

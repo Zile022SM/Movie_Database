@@ -1,6 +1,7 @@
 import React from 'react';
 
 function WatchedListComponent({ watched }) {
+  
   return (
     <ul className="list">
         {watched.map((movie) => (
