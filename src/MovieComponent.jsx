@@ -1,8 +1,8 @@
 import React from 'react';
 
-function MovieComponent({ movie }) {
+function MovieComponent({ movie, onMovieDetail }) {
   return (
-    <li key={movie.imdbID}>
+    <li key={movie.imdbID} onClick={() => onMovieDetail(movie.imdbID)}>
         <img src={movie.Poster} alt={`${movie.Title} poster`} />
         <h3>{movie.Title}</h3>
         <div>

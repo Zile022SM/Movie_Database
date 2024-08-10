@@ -1,11 +1,11 @@
 import React from 'react';
 import MovieComponent from './MovieComponent';
 
-function MovieListComponent({ movies }) {
+function MovieListComponent({ movies, onMovieDetail }) {
   return (
-    <ul className="list">
+    <ul className="list list-movies">
         {movies?.map((movie) => (
-            <MovieComponent key={movie.imdbID} movie={movie} />
+            <MovieComponent key={movie.imdbID} movie={movie} onMovieDetail={onMovieDetail} />
         ))}
     </ul>
   );

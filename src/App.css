@@ -208,6 +208,7 @@ body {
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s;
+  margin-left:20px;
 }
 
 .btn-delete:hover {

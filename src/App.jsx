@@ -11,53 +11,7 @@ import WatchedListComponent from "./WatchedListComponent";
 import WatchedSummaryComponent from "./WatchedSummaryComponent";
 import Loader from "./Loader";
 import ErrorMessage from "./ErrorMessage";
-
-const tempMovieData = [
-  {
-    imdbID: "tt1375666",
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt0133093",
-    Title: "The Matrix",
-    Year: "1999",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
-  },
-  {
-    imdbID: "tt6751668",
-    Title: "Parasite",
-    Year: "2019",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
-  },
-];
-
-const tempWatchedData = [
-  {
-    imdbID: "tt1375666",
-    Title: "Inception",
-    Year: "2010",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
-    runtime: 148,
-    imdbRating: 8.8,
-    userRating: 10,
-  },
-  {
-    imdbID: "tt0088763",
-    Title: "Back to the Future",
-    Year: "1985",
-    Poster:
-      "https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
-    runtime: 116,
-    imdbRating: 8.5,
-    userRating: 9,
-  },
-];
+import MovieDetails from "./MovieDetails";
 
 const KEY = "a15c47cf";
 
@@ -68,6 +22,23 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+
+  function handleMovieDetail(id){
+      setSelectedId((selectedId) => (selectedId === id ? null : id));
+  }
+
+  function handleAddToWatched(movie){
+    setWatched((watched) => [...watched, movie]);
+  }
+
+  function handleCloseMovieDetail(){
+      setSelectedId(null);
+  }
+
+  function handleDeleteFromWatched(id){
+    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
+  }
 
  useEffect(function() {
 
@@ -85,6 +56,8 @@ export default function App() {
       if(data.Response === "False") throw new Error("Movie not found");
 
       setMovies(data.Search);
+      console.log(data.Search);
+      
       setIsLoading(false);
 
     }catch(err){
@@ -117,13 +90,20 @@ export default function App() {
       <MainComponent>
         <BoxComponent>
           {isLoading && <Loader />}
-          {!isLoading && !error && <MovieListComponent movies={movies} />}
+          {!isLoading && !error && <MovieListComponent movies={movies} onMovieDetail={handleMovieDetail}/>}
           {error && <ErrorMessage message={error} />}
         </BoxComponent>
 
         <BoxComponent>
-          <WatchedSummaryComponent watched={watched} />
-          <WatchedListComponent watched={watched} />
+          { selectedId ? (
+              <MovieDetails selectedId={selectedId} setSelectedId={setSelectedId} onCloseMovieDetail={handleCloseMovieDetail} onAddWatched={handleAddToWatched} watched={watched} />
+            ):(
+              <>
+                <WatchedSummaryComponent watched={watched} />
+                <WatchedListComponent watched={watched} onMovieDetail={handleMovieDetail} onDeleteFromWatched={handleDeleteFromWatched} />
+              </>        
+            ) 
+          }
         </BoxComponent>
       </MainComponent>
 
